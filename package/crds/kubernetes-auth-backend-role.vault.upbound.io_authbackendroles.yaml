@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.template.upbound.io
+  name: authbackendroles.kubernetes-auth-backend-role.vault.upbound.io
 spec:
-  group: null.template.upbound.io
+  group: kubernetes-auth-backend-role.vault.upbound.io
   names:
     categories:
     - crossplane
     - managed
-    - template
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    - vault
+    kind: AuthBackendRole
+    listKind: AuthBackendRoleList
+    plural: authbackendroles
+    singular: authbackendrole
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. <no value>
+        description: AuthBackendRole is the Schema for the AuthBackendRoles API. <no
+          value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: AuthBackendRoleSpec defines the desired state of AuthBackendRole
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +64,74 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
+                  aliasNameSource:
+                    description: 'Configures how identity aliases are generated. Valid
+                      choices are: serviceaccount_uid, serviceaccount_name'
+                    type: string
+                  audience:
+                    description: Optional Audience claim to verify in the JWT.
+                    type: string
+                  backend:
+                    description: Unique name of the kubernetes backend to configure.
+                    type: string
+                  boundServiceAccountNames:
+                    description: List of service account names able to access this
+                      role. If set to `["*"]` all names are allowed, both this and
+                      bound_service_account_namespaces can not be "*".
+                    items:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                    type: array
+                  boundServiceAccountNamespaces:
+                    description: List of namespaces allowed to access this role. If
+                      set to `["*"]` all namespaces are allowed, both this and bound_service_account_names
+                      can not be set to "*".
+                    items:
+                      type: string
+                    type: array
+                  namespace:
+                    description: Target namespace. (requires Enterprise)
+                    type: string
+                  roleName:
+                    description: Name of the role.
+                    type: string
+                  tokenBoundCidrs:
+                    description: Specifies the blocks of IP addresses which are allowed
+                      to use the generated token
+                    items:
+                      type: string
+                    type: array
+                  tokenExplicitMaxTtl:
+                    description: Generated Token's Explicit Maximum TTL in seconds
+                    type: number
+                  tokenMaxTtl:
+                    description: The maximum lifetime of the generated token
+                    type: number
+                  tokenNoDefaultPolicy:
+                    description: If true, the 'default' policy will not automatically
+                      be added to generated tokens
+                    type: boolean
+                  tokenNumUses:
+                    description: The maximum number of times a token may be used,
+                      a value of zero means unlimited
+                    type: number
+                  tokenPeriod:
+                    description: Generated Token's Period
+                    type: number
+                  tokenPolicies:
+                    description: Generated Token's Policies
+                    items:
+                      type: string
+                    type: array
+                  tokenTtl:
+                    description: The initial ttl of the token to generate in seconds
+                    type: number
+                  tokenType:
+                    description: The type of token to generate, service or batch
+                    type: string
+                required:
+                - boundServiceAccountNames
+                - boundServiceAccountNamespaces
+                - roleName
                 type: object
               providerConfigRef:
                 default:
@@ -243,7 +305,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: AuthBackendRoleStatus defines the observed state of AuthBackendRole.
             properties:
               atProvider:
                 properties:

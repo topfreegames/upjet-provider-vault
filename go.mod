@@ -1,6 +1,6 @@
-module github.com/upbound/upjet-provider-template
+module github.com/topfreegames/upjet-provider-vault
 
-go 1.19
+go 1.18
 
 require (
 	github.com/crossplane/crossplane-runtime v0.19.0-rc.0.0.20221012013934-bce61005a175

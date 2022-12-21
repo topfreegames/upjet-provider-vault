@@ -1,0 +1,13 @@
+apiVersion: kubernetes-auth-backend-role.vault.upbound.io/v1alpha1
+kind: AuthBackendRole
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    roleName: test-role
+    boundServiceAccountNames:
+    - test-role
+    boundServiceAccountNamespaces:
+    - default
+  providerConfigRef:
+    name: default
