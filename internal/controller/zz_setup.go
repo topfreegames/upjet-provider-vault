@@ -9,7 +9,8 @@ import (
 
 	"github.com/upbound/upjet/pkg/controller"
 
-	authbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/kubernetes-auth-backend-role/authbackendrole"
+	group "github.com/topfreegames/upjet-provider-vault/internal/controller/identitygroup/group"
+	authbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/kubernetesauthbackendrole/authbackendrole"
 	providerconfig "github.com/topfreegames/upjet-provider-vault/internal/controller/providerconfig"
 )
 
@@ -17,6 +18,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		group.Setup,
 		authbackendrole.Setup,
 		providerconfig.Setup,
 	} {

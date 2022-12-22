@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: authbackendroles.kubernetes-auth-backend-role.vault.upbound.io
+  name: groups.identitygroup.vault.upbound.io
 spec:
-  group: kubernetes-auth-backend-role.vault.upbound.io
+  group: identitygroup.vault.upbound.io
   names:
     categories:
     - crossplane
     - managed
     - vault
-    kind: AuthBackendRole
-    listKind: AuthBackendRoleList
-    plural: authbackendroles
-    singular: authbackendrole
+    kind: Group
+    listKind: GroupList
+    plural: groups
+    singular: group
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: AuthBackendRole is the Schema for the AuthBackendRoles API. <no
-          value>
+        description: Group is the Schema for the Groups API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -51,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: AuthBackendRoleSpec defines the desired state of AuthBackendRole
+            description: GroupSpec defines the desired state of Group
             properties:
               deletionPolicy:
                 default: Delete
@@ -64,74 +63,43 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  aliasNameSource:
-                    description: 'Configures how identity aliases are generated. Valid
-                      choices are: serviceaccount_uid, serviceaccount_name'
-                    type: string
-                  audience:
-                    description: Optional Audience claim to verify in the JWT.
-                    type: string
-                  backend:
-                    description: Unique name of the kubernetes backend to configure.
-                    type: string
-                  boundServiceAccountNames:
-                    description: List of service account names able to access this
-                      role. If set to `["*"]` all names are allowed, both this and
-                      bound_service_account_namespaces can not be "*".
+                  externalMemberEntityIds:
+                    description: Manage member entities externally through `vault_identity_group_member_entity_ids`
+                    type: boolean
+                  externalMemberGroupIds:
+                    description: Manage member groups externally through `vault_identity_group_member_group_ids`
+                    type: boolean
+                  externalPolicies:
+                    description: Manage policies externally through `vault_identity_group_policies`,
+                      allows using group ID in assigned policies.
+                    type: boolean
+                  memberEntityIds:
+                    description: Entity IDs to be assigned as group members.
                     items:
                       type: string
                     type: array
-                  boundServiceAccountNamespaces:
-                    description: List of namespaces allowed to access this role. If
-                      set to `["*"]` all namespaces are allowed, both this and bound_service_account_names
-                      can not be set to "*".
+                  memberGroupIds:
+                    description: Group IDs to be assigned as group members.
                     items:
                       type: string
                     type: array
+                  metadata:
+                    additionalProperties:
+                      type: string
+                    description: Metadata to be associated with the group.
+                    type: object
                   namespace:
                     description: Target namespace. (requires Enterprise)
                     type: string
-                  roleName:
-                    description: Name of the role.
-                    type: string
-                  tokenBoundCidrs:
-                    description: Specifies the blocks of IP addresses which are allowed
-                      to use the generated token
+                  policies:
+                    description: Policies to be tied to the group.
                     items:
                       type: string
                     type: array
-                  tokenExplicitMaxTtl:
-                    description: Generated Token's Explicit Maximum TTL in seconds
-                    type: number
-                  tokenMaxTtl:
-                    description: The maximum lifetime of the generated token
-                    type: number
-                  tokenNoDefaultPolicy:
-                    description: If true, the 'default' policy will not automatically
-                      be added to generated tokens
-                    type: boolean
-                  tokenNumUses:
-                    description: The maximum number of times a token may be used,
-                      a value of zero means unlimited
-                    type: number
-                  tokenPeriod:
-                    description: Generated Token's Period
-                    type: number
-                  tokenPolicies:
-                    description: Generated Token's Policies
-                    items:
-                      type: string
-                    type: array
-                  tokenTtl:
-                    description: The initial ttl of the token to generate in seconds
-                    type: number
-                  tokenType:
-                    description: The type of token to generate, service or batch
+                  type:
+                    description: Type of the group, internal or external. Defaults
+                      to internal.
                     type: string
-                required:
-                - boundServiceAccountNames
-                - boundServiceAccountNamespaces
-                - roleName
                 type: object
               providerConfigRef:
                 default:
@@ -305,7 +273,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: AuthBackendRoleStatus defines the observed state of AuthBackendRole.
+            description: GroupStatus defines the observed state of Group.
             properties:
               atProvider:
                 properties:

@@ -1,0 +1,9 @@
+apiVersion: identitygroup.vault.upbound.io/v1alpha1
+kind: Group
+metadata:
+  name: hello-crossplane-group
+spec:
+  forProvider:
+    type: internal
+  providerConfigRef:
+    name: default

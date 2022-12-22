@@ -43,10 +43,6 @@ type AuthBackendRoleParameters struct {
 	// +kubebuilder:validation:Optional
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 
-	// Name of the role.
-	// +kubebuilder:validation:Required
-	RoleName *string `json:"roleName" tf:"role_name,omitempty"`
-
 	// Specifies the blocks of IP addresses which are allowed to use the generated token
 	// +kubebuilder:validation:Optional
 	TokenBoundCidrs []*string `json:"tokenBoundCidrs,omitempty" tf:"token_bound_cidrs,omitempty"`

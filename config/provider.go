@@ -7,8 +7,9 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
-	"github.com/topfreegames/upjet-provider-vault/config/kubernetes-auth-backend-role"
 
+	"github.com/topfreegames/upjet-provider-vault/config/identity-group"
+	"github.com/topfreegames/upjet-provider-vault/config/kubernetes-auth-backend-role"
 	ujconfig "github.com/upbound/upjet/pkg/config"
 )
 
@@ -34,6 +35,7 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		kubernetes_auth_backend_role.Configure,
+		identity_group.Configure,
 	} {
 		configure(pc)
 	}

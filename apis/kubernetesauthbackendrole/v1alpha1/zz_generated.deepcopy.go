@@ -137,11 +137,6 @@ func (in *AuthBackendRoleParameters) DeepCopyInto(out *AuthBackendRoleParameters
 		*out = new(string)
 		**out = **in
 	}
-	if in.RoleName != nil {
-		in, out := &in.RoleName, &out.RoleName
-		*out = new(string)
-		**out = **in
-	}
 	if in.TokenBoundCidrs != nil {
 		in, out := &in.TokenBoundCidrs, &out.TokenBoundCidrs
 		*out = make([]*string, len(*in))

@@ -18,7 +18,7 @@ import (
 	"github.com/upbound/upjet/pkg/terraform"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/topfreegames/upjet-provider-vault/apis/kubernetes-auth-backend-role/v1alpha1"
+	v1alpha1 "github.com/topfreegames/upjet-provider-vault/apis/kubernetesauthbackendrole/v1alpha1"
 )
 
 // Setup adds a controller that reconciles AuthBackendRole managed resources.

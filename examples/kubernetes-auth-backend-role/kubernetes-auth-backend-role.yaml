@@ -1,4 +1,4 @@
-apiVersion: kubernetes-auth-backend-role.vault.upbound.io/v1alpha1
+apiVersion: kubernetesauthbackendrole.vault.upbound.io/v1alpha1
 kind: AuthBackendRole
 metadata:
   name: hello-crossplane
