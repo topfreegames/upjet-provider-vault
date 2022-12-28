@@ -1,4 +1,4 @@
-package kubernetes_auth_backend_role
+package kubernetesauthbackendrole
 
 import "github.com/upbound/upjet/pkg/config"
 

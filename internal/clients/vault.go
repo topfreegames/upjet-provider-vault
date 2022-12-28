@@ -7,14 +7,13 @@ package clients
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
+	"github.com/topfreegames/upjet-provider-vault/apis/v1beta1"
+	"github.com/upbound/upjet/pkg/terraform"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	"github.com/upbound/upjet/pkg/terraform"
-
-	"github.com/topfreegames/upjet-provider-vault/apis/v1beta1"
 )
 
 const (
