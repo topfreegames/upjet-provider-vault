@@ -1,9 +1,10 @@
 apiVersion: identitygroup.vault.upbound.io/v1alpha1
 kind: Group
 metadata:
-  name: hello-crossplane-group
+  name: brocamonster-group
 spec:
   forProvider:
+    name: brocamonster-group
     type: internal
   providerConfigRef:
     name: default

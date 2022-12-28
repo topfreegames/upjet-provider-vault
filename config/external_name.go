@@ -11,7 +11,7 @@ import "github.com/upbound/upjet/pkg/config"
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
 	"vault_kubernetes_auth_backend_role": config.TemplatedStringAsIdentifier("role_name", "auth/{{ .parameters.backend }}/role/{{ .parameters.role_name }}"),
-	"vault_identity_group":               config.NameAsIdentifier,
+	"vault_identity_group":               config.TemplatedStringAsIdentifier("name", "{{ .parameters.name }}"),
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
