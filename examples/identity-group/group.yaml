@@ -6,4 +6,4 @@ spec:
   forProvider:
     type: internal
   providerConfigRef:
-    name: default
+    name: upjet-provider-vault

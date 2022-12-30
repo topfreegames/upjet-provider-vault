@@ -47,6 +47,9 @@ spec:
           spec:
             description: A ProviderConfigSpec defines the desired state of a ProviderConfig.
             properties:
+              address:
+                description: Vault Address
+                type: string
               credentials:
                 description: Credentials required to authenticate to this provider.
                 properties:
@@ -100,8 +103,13 @@ spec:
                 required:
                 - source
                 type: object
+              skip_tls_verify:
+                description: Vault SkipTlsVerify
+                type: boolean
             required:
+            - address
             - credentials
+            - skip_tls_verify
             type: object
           status:
             description: A ProviderConfigStatus reflects the observed state of a ProviderConfig.

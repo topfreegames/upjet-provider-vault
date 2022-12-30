@@ -14,6 +14,12 @@ import (
 type ProviderConfigSpec struct {
 	// Credentials required to authenticate to this provider.
 	Credentials ProviderCredentials `json:"credentials"`
+
+	// Vault Address
+	Address string `json:"address"`
+
+	// Vault SkipTLSVerify
+	SkipTLSVerify bool `json:"skip_tls_verify"`
 }
 
 // ProviderCredentials required to authenticate.

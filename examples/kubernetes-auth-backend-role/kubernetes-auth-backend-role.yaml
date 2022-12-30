@@ -10,4 +10,4 @@ spec:
     boundServiceAccountNamespaces:
     - default
   providerConfigRef:
-    name: default
+    name: upjet-provider-vault

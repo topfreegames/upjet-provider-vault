@@ -6,7 +6,7 @@ package clients
 
 import (
 	"context"
-	"encoding/json"
+	"strings"
 
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
@@ -18,11 +18,10 @@ import (
 
 const (
 	// error messages
-	errNoProviderConfig     = "no providerConfigRef provided"
-	errGetProviderConfig    = "cannot get referenced ProviderConfig"
-	errTrackUsage           = "cannot track ProviderConfig usage"
-	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal vault credentials as JSON"
+	errNoProviderConfig   = "no providerConfigRef provided"
+	errGetProviderConfig  = "cannot get referenced ProviderConfig"
+	errTrackUsage         = "cannot track ProviderConfig usage"
+	errExtractCredentials = "cannot extract credentials"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -51,26 +50,16 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, errors.Wrap(err, errTrackUsage)
 		}
 
-		data, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
+		token, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
 
-		creds := map[string]string{}
-		if err := json.Unmarshal(data, &creds); err != nil {
-			return ps, errors.Wrap(err, errUnmarshalCredentials)
-		}
-
 		ps.Configuration = map[string]any{}
-		if v, ok := creds["address"]; ok {
-			ps.Configuration["address"] = v
-		}
-		if v, ok := creds["skip_tls_verify"]; ok {
-			ps.Configuration["skip_tls_verify"] = v
-		}
-		if v, ok := creds["token"]; ok {
-			ps.Configuration["token"] = v
-		}
+		ps.Configuration["address"] = pc.Spec.Address
+		ps.Configuration["skip_tls_verify"] = pc.Spec.SkipTLSVerify
+		ps.Configuration["token"] = strings.TrimSuffix(string(token), "\n")
+
 		return ps, nil
 	}
 }

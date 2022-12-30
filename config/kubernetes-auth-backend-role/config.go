@@ -3,23 +3,24 @@ package kubernetesauthbackendrole
 import (
 	"context"
 	"fmt"
+
 	"github.com/crossplane/crossplane-runtime/pkg/errors"
 	"github.com/upbound/upjet/pkg/config"
 )
 
 var (
-	ErrFmtNoAttribute    = ""
-	ErrFmtUnexpectedType = ""
+	errFmtNoAttribute    = "attribute not found"
+	errFmtUnexpectedType = "attribute not of type string"
 )
 
 func getFullyQualifiedIDfunc(ctx context.Context, externalName string, parameters map[string]any, providerConfig map[string]any) (string, error) {
 	backend, ok := parameters["backend"]
 	if !ok {
-		return "", errors.Errorf(ErrFmtNoAttribute, "backend")
+		return "", errors.Errorf(errFmtNoAttribute, "backend")
 	}
 	backendStr, ok := backend.(string)
 	if !ok {
-		return "", errors.Errorf(ErrFmtUnexpectedType, "backend")
+		return "", errors.Errorf(errFmtUnexpectedType, "backend")
 	}
 
 	return fmt.Sprintf("auth/%s/role/%s", backendStr, externalName), nil

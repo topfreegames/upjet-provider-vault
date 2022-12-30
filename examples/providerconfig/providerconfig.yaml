@@ -1,11 +1,13 @@
 apiVersion: vault.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: default
+  name: upjet-provider-vault
 spec:
+  address: http://localhost:8200
+  #address: https://internal-vault.wildlife.io
+  skip_tls_verify: true
   credentials:
-    source: Secret
-    secretRef:
-      name: example-creds
-      namespace: crossplane-system
-      key: credentials
+    source: Filesystem
+    fs:
+      #path: /vault/secrets/.vault-token
+      path: /Users/marcus.brocaneli/GolandProjects/upjet-provider-vault/.vault-token
