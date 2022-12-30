@@ -68,6 +68,9 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if v, ok := creds["skip_tls_verify"]; ok {
 			ps.Configuration["skip_tls_verify"] = v
 		}
+		if v, ok := creds["token"]; ok {
+			ps.Configuration["token"] = v
+		}
 		return ps, nil
 	}
 }

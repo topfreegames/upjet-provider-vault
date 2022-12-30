@@ -52,8 +52,8 @@ type GroupParameters struct {
 	Policies []*string `json:"policies,omitempty" tf:"policies,omitempty"`
 
 	// Type of the group, internal or external. Defaults to internal.
-	// +kubebuilder:validation:Optional
-	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+	// +kubebuilder:validation:Required
+	Type *string `json:"type" tf:"type,omitempty"`
 }
 
 // GroupSpec defines the desired state of Group
