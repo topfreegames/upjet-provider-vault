@@ -1,12 +1,13 @@
 # ====================================================================================
 # Setup Project
 
+PLATFORMS := linux_amd64 linux_arm64
 include ../../../build/makelib/common.mk
 
 # ====================================================================================
 #  Options
-
-include ../../../build/makelib/imagelight.mk
+IMAGE = $(BUILD_REGISTRY)/upjet-provider-vault-controller-$(ARCH)
+include ../../../build/makelib/image.mk
 
 # ====================================================================================
 # Targets

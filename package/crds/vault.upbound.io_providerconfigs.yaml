@@ -104,7 +104,7 @@ spec:
                 - source
                 type: object
               skip_tls_verify:
-                description: Vault SkipTlsVerify
+                description: Vault SkipTLSVerify
                 type: boolean
             required:
             - address

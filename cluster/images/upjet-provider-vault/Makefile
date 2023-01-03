@@ -7,7 +7,7 @@ include ../../../build/makelib/common.mk
 # ====================================================================================
 #  Options
 DOCKER_REGISTRY ?= tfgco
-IMAGE = $(BUILD_REGISTRY)/upjet-provider-vault-manifests-$(ARCH)
+IMAGE = $(BUILD_REGISTRY)/upjet-provider-vault-$(ARCH)
 OSBASEIMAGE = scratch
 include ../../../build/makelib/image.mk
 
