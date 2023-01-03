@@ -1,12 +1,12 @@
 apiVersion: kubernetesauthbackendrole.vault.upbound.io/v1alpha1
 kind: AuthBackendRole
 metadata:
-  name: hello-crossplane
+  name: brocamonster-group
 spec:
   forProvider:
-    backend: kubernetes
+    backend: kubernetes-infra-prod-us-east-1
     boundServiceAccountNames:
-    - test-role
+    - brocamonster
     boundServiceAccountNamespaces:
     - default
   providerConfigRef:

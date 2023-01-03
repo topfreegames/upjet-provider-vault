@@ -4,4 +4,4 @@ metadata:
   name: upjet-provider-vault
 spec:
   controller:
-    image: brocaneli/test:2.0.0
+    image: tfgco/upjet-provider-vault-controller:1.0.0

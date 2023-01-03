@@ -57,14 +57,14 @@ UPTEST_VERSION = v0.2.1
 # ====================================================================================
 # Setup Images
 
-REGISTRY_ORGS ?= hub.docker.com/tfgco
-IMAGES = $(PROJECT_NAME)
+REGISTRY_ORGS ?= docker.io/tfgco
+IMAGES = $(PROJECT_NAME) $(PROJECT_NAME)-controller
 -include build/makelib/imagelight.mk
 
 # ====================================================================================
 # Setup XPKG
 
-XPKG_REG_ORGS ?= hub.docker.com/tfgco
+XPKG_REG_ORGS ?= docker.io/tfgco
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
 XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/upbound

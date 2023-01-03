@@ -15,7 +15,7 @@ data:
       }
       sink "file" {
         config = {
-          path = "/vault/secrets/.vault-token"
+          path = "/tmp/.vault-token"
           mode = 0666
         }
       }
@@ -26,7 +26,7 @@ kind: Provider
 metadata:
   name: upjet-provider-vault
 spec:
-  package: brocaneli/manifests:2.0.0
+  package: tfgco/upjet-provider-vault:1.0.0
   controllerConfigRef:
     name: upjet-provider-vault-config
 ---
@@ -35,13 +35,13 @@ kind: ProviderConfig
 metadata:
   name: upjet-provider-vault
 spec:
-  address: http://localhost:8200
+  address: http://vault-internal.vault.svc.cluster.local:8200
   #address: https://internal-vault.wildlife.io
   skip_tls_verify: true
   credentials:
     source: Filesystem
     fs:
-      path: /vault/secrets/.vault-token
+      path: /tmp/.vault-token
       #path: /Users/marcus.brocaneli/GolandProjects/upjet-provider-vault/.vault-token
 ---
 apiVersion: pkg.crossplane.io/v1alpha1
@@ -51,9 +51,9 @@ metadata:
 spec:
   metadata:
     annotations:
-      vault.security.banzaicloud.io/vault-role: "crossplane"
+      vault.security.banzaicloud.io/vault-role: "resourcesv2"
       vault.security.banzaicloud.io/vault-agent-configmap: upjet-provider-vault-agent-cfg
-      vault.security.banzaicloud.io/vault-configfile-path: /vault/secrets/
+      vault.security.banzaicloud.io/vault-configfile-path: /tmp/
   podSecurityContext:
     runAsUser: 0
     runAsGroup: 0
