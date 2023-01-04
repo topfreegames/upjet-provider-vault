@@ -23,7 +23,7 @@ NPROCS ?= 1
 GO_TEST_PARALLEL := $(shell echo $$(( $(NPROCS) / 2 )))
 
 GO_REQUIRED_VERSION ?= 1.19
-GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider
+GO_STATIC_PACKAGES = $(GO_PROJECT)/cmd/provider $(GO_PROJECT)/cmd/generator
 GO_LDFLAGS += -X $(GO_PROJECT)/internal/version.Version=$(VERSION)
 GO_SUBDIRS += cmd internal apis
 GO111MODULE = on
@@ -44,6 +44,42 @@ IMAGES = $(PROJECT_NAME) $(PROJECT_NAME)-controller
 fallthrough: submodules
 	@echo Initial setup complete. Running make again . . .
 	@make
+
+# ====================================================================================
+# Setup Terraform for fetching provider schema
+TERRAFORM := $(TOOLS_HOST_DIR)/terraform-$(TERRAFORM_VERSION)
+TERRAFORM_WORKDIR := $(WORK_DIR)/terraform
+TERRAFORM_PROVIDER_SCHEMA := config/schema.json
+
+$(TERRAFORM):
+	@$(INFO) installing terraform $(HOSTOS)-$(HOSTARCH)
+	@mkdir -p $(TOOLS_HOST_DIR)/tmp-terraform
+	@curl -fsSL https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_$(SAFEHOST_PLATFORM).zip -o $(TOOLS_HOST_DIR)/tmp-terraform/terraform.zip
+	@unzip $(TOOLS_HOST_DIR)/tmp-terraform/terraform.zip -d $(TOOLS_HOST_DIR)/tmp-terraform
+	@mv $(TOOLS_HOST_DIR)/tmp-terraform/terraform $(TERRAFORM)
+	@rm -fr $(TOOLS_HOST_DIR)/tmp-terraform
+	@$(OK) installing terraform $(HOSTOS)-$(HOSTARCH)
+
+$(TERRAFORM_PROVIDER_SCHEMA): $(TERRAFORM)
+	@$(INFO) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
+	@mkdir -p $(TERRAFORM_WORKDIR)
+	@echo '{"terraform":[{"required_providers":[{"provider":{"source":"'"$(TERRAFORM_PROVIDER_SOURCE)"'","version":"'"$(TERRAFORM_PROVIDER_VERSION)"'"}}],"required_version":"'"$(TERRAFORM_VERSION)"'"}]}' > $(TERRAFORM_WORKDIR)/main.tf.json
+	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) init > $(TERRAFORM_WORKDIR)/terraform-logs.txt 2>&1
+	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) providers schema -json=true > $(TERRAFORM_PROVIDER_SCHEMA) 2>> $(TERRAFORM_WORKDIR)/terraform-logs.txt
+	@$(OK) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
+
+pull-docs:
+	@if [ ! -d "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" ]; then \
+  		mkdir -p "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" && \
+		git clone -c advice.detachedHead=false --depth 1 --filter=blob:none --branch "v$(TERRAFORM_PROVIDER_VERSION)" --sparse "$(TERRAFORM_PROVIDER_REPO)" "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)"; \
+	fi
+	@git -C "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" sparse-checkout set "$(TERRAFORM_DOCS_PATH)"
+
+generate.init: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
+
+.PHONY: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
+# ====================================================================================
+# Targets
 
 # integration tests
 e2e.run: test-integration
