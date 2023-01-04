@@ -4,4 +4,4 @@ metadata:
   name: upjet-provider-vault
 spec:
   controller:
-    image: tfgco/upjet-provider-vault-controller:1.0.0
+    image: DOCKER_REGISTRY/upjet-provider-vault-controller:VERSION
