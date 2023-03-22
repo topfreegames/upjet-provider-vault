@@ -116,7 +116,7 @@ jobs:
         run: make vendor vendor.check
 
       - name: Check Diff
-        run: go version && make check-diff
+        run: go version && cd build && git rev-parse HEAD && cd .. && make check-diff
 
   unit-tests:
     runs-on: ubuntu-22.04
