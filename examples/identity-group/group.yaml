@@ -2,8 +2,11 @@ apiVersion: identitygroup.vault.upbound.io/v1alpha1
 kind: Group
 metadata:
   name: brocamonster-group
+  annotations:
+    crossplane.io/external-name: 1290c797-dd07-79c6-7a9a-949934107430
 spec:
   forProvider:
     type: internal
+    name: brocamonster-group
   providerConfigRef:
     name: upjet-provider-vault

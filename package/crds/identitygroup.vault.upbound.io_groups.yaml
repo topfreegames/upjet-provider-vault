@@ -88,6 +88,9 @@ spec:
                       type: string
                     description: Metadata to be associated with the group.
                     type: object
+                  name:
+                    description: Name of the group.
+                    type: string
                   namespace:
                     description: Target namespace. (requires Enterprise)
                     type: string

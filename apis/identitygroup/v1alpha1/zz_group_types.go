@@ -43,6 +43,10 @@ type GroupParameters struct {
 	// +kubebuilder:validation:Optional
 	Metadata map[string]*string `json:"metadata,omitempty" tf:"metadata,omitempty"`
 
+	// Name of the group.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// Target namespace. (requires Enterprise)
 	// +kubebuilder:validation:Optional
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`

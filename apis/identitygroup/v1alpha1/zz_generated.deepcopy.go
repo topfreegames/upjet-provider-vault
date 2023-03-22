@@ -147,6 +147,11 @@ func (in *GroupParameters) DeepCopyInto(out *GroupParameters) {
 			(*out)[key] = outVal
 		}
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Namespace != nil {
 		in, out := &in.Namespace, &out.Namespace
 		*out = new(string)
