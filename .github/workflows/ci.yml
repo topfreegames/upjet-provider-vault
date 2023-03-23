@@ -116,7 +116,17 @@ jobs:
         run: make vendor vendor.check
 
       - name: Check Diff
-        run: go version && cd build && git rev-parse HEAD && cd .. && make check-diff
+        run: make generate
+
+      - name: Upload File as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: schema.json
+          path: config/schema.json
+          retention-days: 1
+
+      - name: Check Diff
+        run: make check-diff
 
   unit-tests:
     runs-on: ubuntu-22.04
