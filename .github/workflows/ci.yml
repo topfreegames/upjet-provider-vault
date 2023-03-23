@@ -115,6 +115,16 @@ jobs:
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
+      - name: Generate files
+        run: make generate
+
+      - name: Upload File as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: schema.json
+          path: config/schema.json
+          retention-days: 1
+
       - name: Check Diff
         run: make check-diff
 
