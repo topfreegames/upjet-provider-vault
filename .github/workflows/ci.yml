@@ -115,7 +115,7 @@ jobs:
       - name: Vendor Dependencies
         run: make vendor vendor.check
 
-      - name: Check Diff
+      - name: Generate files
         run: make generate
 
       - name: Upload File as Artifact
