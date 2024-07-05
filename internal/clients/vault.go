@@ -6,26 +6,64 @@ package clients
 
 import (
 	"context"
-	"strings"
+	"encoding/json"
 
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
+	"github.com/crossplane/upjet/pkg/terraform"
 	"github.com/pkg/errors"
 	"github.com/topfreegames/upjet-provider-vault/apis/v1beta1"
-	"github.com/upbound/upjet/pkg/terraform"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
+	// provider config
+	// source: https://registry.terraform.io/providers/hashicorp/vault/latest/docs
+
+	// required origin URL of the Vault server
+	keyAddress = "address"
+
+	// optional provider arguments
+	// remove options that we do not yet want to implement
+	keyAddAddressToEnv      = "add_address_to_env"
+	keyToken                = "token"
+	keyTokenName            = "token_name"
+	keyCaCertFile           = "ca_cert_file"
+	keyCaCertDir            = "ca_cert_dir"
+	keyAuthLoginUserpass    = "auth_login_userpath"
+	keyAuthLoginAWS         = "auth_login_aws"
+	keyAuthLoginCert        = "auth_login_cert"
+	keyAuthLoginGCP         = "auth_login_gcp"
+	keyAuthLoginKerberos    = "auth_login_kerberos"
+	keyAuthLoginRadius      = "auth_login_radius"
+	keyAuthLoginOCI         = "auth_login_oci"
+	keyAuthLoginOIDC        = "auth_login_oidc"
+	keyAuthLoginJWT         = "auth_login_jwt"
+	keyAuthLoginAzure       = "auth_login_azure"
+	keyAuthLogin            = "auth_login"
+	keyClientAuth           = "client_auth"
+	keySkipTLSVerify        = "skip_tls_verify"
+	keyTLSServerName        = "tls_server_name"
+	keySkipChildToken       = "skip_child_token"
+	keyMaxLeaseTTLSeconds   = "max_lease_ttl_seconds"
+	keyMaxRetries           = "max_retries"
+	keyMaxRetriesCcc        = "max_retries_ccc"
+	keyNamespace            = "namespace"
+	keySkipGetVaultVersion  = "skip_get_vault_version"
+	keyVaultVersionOverride = "vault_version_override"
+	keyHeaders              = "headers"
+
 	// error messages
-	errNoProviderConfig   = "no providerConfigRef provided"
-	errGetProviderConfig  = "cannot get referenced ProviderConfig"
-	errTrackUsage         = "cannot track ProviderConfig usage"
-	errExtractCredentials = "cannot extract credentials"
+	errNoProviderConfig     = "no providerConfigRef provided"
+	errGetProviderConfig    = "cannot get referenced ProviderConfig"
+	errTrackUsage           = "cannot track ProviderConfig usage"
+	errExtractCredentials   = "cannot extract credentials"
+	errUnmarshalCredentials = "cannot unmarshal vault credentials as JSON"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
+// nolint:gocyclo
 func TerraformSetupBuilder(version, providerSource, providerVersion string) terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
 		ps := terraform.Setup{
@@ -50,16 +88,56 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, errors.Wrap(err, errTrackUsage)
 		}
 
-		token, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
+		// set provider configuration
+		ps.Configuration = map[string]any{}
+
+		// Assign mandatory address parameter
+		ps.Configuration[keyAddress] = pc.Spec.Address
+
+		// Assign optional parameters
+		ps.Configuration[keyAddAddressToEnv] = pc.Spec.AddAddressToEnv
+		ps.Configuration[keySkipTLSVerify] = pc.Spec.SkipTLSVerify
+		if len(pc.Spec.TLSServerName) > 0 {
+			ps.Configuration[keyTLSServerName] = pc.Spec.TLSServerName
+		}
+		ps.Configuration[keySkipChildToken] = pc.Spec.SkipChildToken
+		ps.Configuration[keyMaxLeaseTTLSeconds] = pc.Spec.MaxLeaseTTLSeconds
+		ps.Configuration[keyMaxRetries] = pc.Spec.MaxRetries
+		ps.Configuration[keyMaxRetriesCcc] = pc.Spec.MaxRetriesCcc
+		if len(pc.Spec.Namespace) > 0 {
+			ps.Configuration[keyNamespace] = pc.Spec.Namespace
+		}
+		ps.Configuration[keySkipGetVaultVersion] = pc.Spec.SkipGetVaultVersion
+		if len(pc.Spec.VaultVersionOverride) > 0 {
+			ps.Configuration[keyVaultVersionOverride] = pc.Spec.VaultVersionOverride
+		}
+		if pc.Spec.Headers != (v1beta1.ProviderHeaders{}) {
+			ps.Configuration[keyHeaders] = pc.Spec.Headers
+		}
+
+		data, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
 
-		ps.Configuration = map[string]any{}
-		ps.Configuration["address"] = pc.Spec.Address
-		ps.Configuration["skip_tls_verify"] = pc.Spec.SkipTLSVerify
-		ps.Configuration["token"] = strings.TrimSuffix(string(token), "\n")
+		creds := map[string]any{}
+		if err := json.Unmarshal(data, &creds); err != nil {
+			return ps, errors.Wrap(err, errUnmarshalCredentials)
+		}
 
+		// Set credentials in Terraform
+		// provider configuration
+		credsKeys := [...]string{keyToken, keyTokenName, keyCaCertFile,
+			keyCaCertDir, keyAuthLoginUserpass, keyAuthLoginAWS,
+			keyAuthLoginCert, keyAuthLoginGCP, keyAuthLoginKerberos,
+			keyAuthLoginRadius, keyAuthLoginOCI, keyAuthLoginOIDC,
+			keyAuthLoginJWT, keyAuthLoginAzure, keyAuthLogin, keyClientAuth}
+
+		for _, key := range credsKeys {
+			if v, ok := creds[key]; ok {
+				ps.Configuration[key] = v
+			}
+		}
 		return ps, nil
 	}
 }

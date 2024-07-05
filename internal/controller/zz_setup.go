@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Upbound Inc.
+Copyright 2022 Upbound Inc.
 */
 
 package controller
@@ -7,7 +7,7 @@ package controller
 import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/upbound/upjet/pkg/controller"
+	"github.com/crossplane/upjet/pkg/controller"
 
 	group "github.com/topfreegames/upjet-provider-vault/internal/controller/identitygroup/group"
 	authbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/kubernetesauthbackendrole/authbackendrole"

@@ -50,7 +50,7 @@ BUILD_IMAGE="${BUILD_REGISTRY}/${PROJECT_NAME}-${SAFEHOSTARCH}"
 PACKAGE_IMAGE="crossplane.io/inttests/${PROJECT_NAME}:${VERSION}"
 CONTROLLER_IMAGE="${BUILD_REGISTRY}/${PROJECT_NAME}-controller-${SAFEHOSTARCH}"
 
-version_tag="$(cat ${projectdir}/_output/version)"
+#version_tag="$(cat ${projectdir}/_output/version)"
 # tag as latest version to load into kind cluster
 PACKAGE_CONTROLLER_IMAGE="${DOCKER_REGISTRY}/${PROJECT_NAME}-controller:${VERSION}"
 K8S_CLUSTER="${K8S_CLUSTER:-${BUILD_REGISTRY}-inttests}"
@@ -72,6 +72,9 @@ fi
 echo_step "setting up local package cache"
 CACHE_PATH="${projectdir}/.work/inttest-package-cache"
 mkdir -p "${CACHE_PATH}"
+echo "${CACHE_PATH}"
+echo "${BUILD_IMAGE}"
+echo "${PACKAGE_IMAGE}"
 echo "created cache dir at ${CACHE_PATH}"
 docker tag "${BUILD_IMAGE}" "${PACKAGE_IMAGE}"
 "${UP}" xpkg xp-extract --from-daemon "${PACKAGE_IMAGE}" -o "${CACHE_PATH}/${PACKAGE_NAME}.gz" && chmod 644 "${CACHE_PATH}/${PACKAGE_NAME}.gz"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/crossplane/crossplane-runtime/pkg/errors"
-	"github.com/upbound/upjet/pkg/config"
+	"github.com/crossplane/upjet/pkg/config"
 )
 
 var (
