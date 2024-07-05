@@ -6,7 +6,7 @@ package clients
 
 import (
 	"context"
-	"encoding/json"
+	"strings"
 
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/upjet/pkg/terraform"
@@ -115,29 +115,16 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			ps.Configuration[keyHeaders] = pc.Spec.Headers
 		}
 
-		data, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
+		token, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
 
-		creds := map[string]any{}
-		if err := json.Unmarshal(data, &creds); err != nil {
-			return ps, errors.Wrap(err, errUnmarshalCredentials)
-		}
+		ps.Configuration = map[string]any{}
+		ps.Configuration[keyAddress] = pc.Spec.Address
+		ps.Configuration[keySkipTLSVerify] = pc.Spec.SkipTLSVerify
+		ps.Configuration[keyToken] = strings.TrimSuffix(string(token), "\n")
 
-		// Set credentials in Terraform
-		// provider configuration
-		credsKeys := [...]string{keyToken, keyTokenName, keyCaCertFile,
-			keyCaCertDir, keyAuthLoginUserpass, keyAuthLoginAWS,
-			keyAuthLoginCert, keyAuthLoginGCP, keyAuthLoginKerberos,
-			keyAuthLoginRadius, keyAuthLoginOCI, keyAuthLoginOIDC,
-			keyAuthLoginJWT, keyAuthLoginAzure, keyAuthLogin, keyClientAuth}
-
-		for _, key := range credsKeys {
-			if v, ok := creds[key]; ok {
-				ps.Configuration[key] = v
-			}
-		}
 		return ps, nil
 	}
 }
