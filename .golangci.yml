@@ -9,6 +9,10 @@ output:
   format: colored-line-number
 
 linters-settings:
+  revive:
+    severity: warning
+    confidence: 0.8
+
   errcheck:
     # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
     # default is false: such cases aren't reported by default.
