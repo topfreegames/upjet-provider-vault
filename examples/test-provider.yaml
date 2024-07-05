@@ -44,7 +44,7 @@ spec:
       path: /tmp/.vault-token
       #path: /Users/marcus.brocaneli/GolandProjects/upjet-provider-vault/.vault-token
 ---
-apiVersion: pkg.crossplane.io/v1alpha1
+apiVersion: pkg.crossplane.io/v1beta1
 kind: ControllerConfig
 metadata:
   name: upjet-provider-vault-config

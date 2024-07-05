@@ -2,6 +2,3 @@ apiVersion: meta.pkg.crossplane.io/v1alpha1
 kind: Provider
 metadata:
   name: upjet-provider-vault
-spec:
-  controller:
-    image: DOCKER_REGISTRY/upjet-provider-vault-controller:VERSION
