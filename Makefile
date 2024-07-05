@@ -3,13 +3,13 @@
 PROJECT_NAME := upjet-provider-vault
 PROJECT_REPO := github.com/topfreegames/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION := 1.3.3
+export TERRAFORM_VERSION := 1.5.7
 
 export TERRAFORM_PROVIDER_SOURCE := hashicorp/vault
 export TERRAFORM_PROVIDER_REPO := https://github.com/hashicorp/terraform-provider-vault
-export TERRAFORM_PROVIDER_VERSION := 3.11.0
+export TERRAFORM_PROVIDER_VERSION := 3.25.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME := terraform-provider-vault
-export TERRAFORM_NATIVE_PROVIDER_BINARY := terraform-provider-vault_v3.11.0_x5
+export TERRAFORM_NATIVE_PROVIDER_BINARY := terraform-provider-vault_v3.25.0_x5
 export TERRAFORM_DOCS_PATH := website/docs/r
 
 PLATFORMS ?= linux_amd64 linux_arm64
@@ -64,6 +64,7 @@ $(TERRAFORM_PROVIDER_SCHEMA): $(TERRAFORM)
 	@$(INFO) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
 	@mkdir -p $(TERRAFORM_WORKDIR)
 	@echo '{"terraform":[{"required_providers":[{"provider":{"source":"'"$(TERRAFORM_PROVIDER_SOURCE)"'","version":"'"$(TERRAFORM_PROVIDER_VERSION)"'"}}],"required_version":"'"$(TERRAFORM_VERSION)"'"}]}' > $(TERRAFORM_WORKDIR)/main.tf.json
+	@rm -f $(TERRAFORM_WORKDIR)/.terraform.lock.hcl
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) init > $(TERRAFORM_WORKDIR)/terraform-logs.txt 2>&1
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) providers schema -json=true > $(TERRAFORM_PROVIDER_SCHEMA) 2>> $(TERRAFORM_WORKDIR)/terraform-logs.txt
 	@$(OK) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
