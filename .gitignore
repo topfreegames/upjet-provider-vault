@@ -5,6 +5,8 @@ cover.out
 /vendor
 /.vendor-new
 .DS_Store
+/terraform
+/hashicorp
 
 # ignore IDE folders
 .vscode/

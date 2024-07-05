@@ -8,9 +8,9 @@ import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
 
+	ujconfig "github.com/crossplane/upjet/pkg/config"
 	identitygroup "github.com/topfreegames/upjet-provider-vault/config/identity-group"
 	kubernetesauthbackendrole "github.com/topfreegames/upjet-provider-vault/config/kubernetes-auth-backend-role"
-	ujconfig "github.com/upbound/upjet/pkg/config"
 )
 
 const (
@@ -28,6 +28,7 @@ var providerMetadata string
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithIncludeList(ExternalNameConfigured()),
+		ujconfig.WithFeaturesPackage("internal/features"),
 		ujconfig.WithDefaultResourceOptions(
 			ExternalNameConfigurations(),
 		))
@@ -42,4 +43,17 @@ func GetProvider() *ujconfig.Provider {
 
 	pc.ConfigureResources()
 	return pc
+}
+
+// ResourcesWithExternalNameConfig returns the list of resources that have external
+// name configured in ExternalNameConfigs table.
+func ResourcesWithExternalNameConfig() []string {
+	l := make([]string, len(ExternalNameConfigs))
+	i := 0
+	for name := range ExternalNameConfigs {
+		// Expected format is regex and we'd like to have exact matches.
+		l[i] = name + "$"
+		i++
+	}
+	return l
 }
