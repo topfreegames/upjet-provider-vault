@@ -12,8 +12,6 @@ export TERRAFORM_PROVIDER_VERSION ?= 4.3.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-vault
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
-export HELM_VERSION=3.14.2
-
 PLATFORMS ?= linux_amd64 linux_arm64
 
 # -include will silently skip missing files, which allows us
