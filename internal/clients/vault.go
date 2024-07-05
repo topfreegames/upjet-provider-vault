@@ -121,9 +121,9 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		ps.Configuration = map[string]any{}
-		ps.Configuration["address"] = pc.Spec.Address
-		ps.Configuration["skip_tls_verify"] = pc.Spec.SkipTLSVerify
-		ps.Configuration["token"] = strings.TrimSuffix(string(token), "\n")
+		ps.Configuration[keyAddress] = pc.Spec.Address
+		ps.Configuration[keySkipTLSVerify] = pc.Spec.SkipTLSVerify
+		ps.Configuration[keyToken] = strings.TrimSuffix(string(token), "\n")
 
 		return ps, nil
 	}
