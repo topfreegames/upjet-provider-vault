@@ -11,7 +11,7 @@ on:
 env:
   # Common versions
   GO_VERSION: '1.22'
-  GOLANGCI_VERSION: 'v1.53.3'
+  GOLANGCI_VERSION: 'v1.59.1'
   DOCKER_BUILDX_VERSION: 'v0.8.2'
 
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
