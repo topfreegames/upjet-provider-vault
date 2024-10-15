@@ -13,7 +13,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"vault_kubernetes_auth_backend_role": config.NameAsIdentifier,
 	"vault_identity_group":               config.NameAsIdentifier,
 	"vault_jwt_auth_backend_role":        config.NameAsIdentifier,
-	"vault_aws_auth_backend_role":        config.NameAsIdentifier,
+	"vault_aws_secret_backend_role":      config.NameAsIdentifier,
 	"vault_policy":                       config.NameAsIdentifier,
 }
 

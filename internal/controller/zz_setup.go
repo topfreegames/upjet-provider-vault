@@ -9,9 +9,9 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	authbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/aws/authbackendrole"
+	secretbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/aws/secretbackendrole"
 	group "github.com/topfreegames/upjet-provider-vault/internal/controller/identitygroup/group"
-	authbackendrolejwt "github.com/topfreegames/upjet-provider-vault/internal/controller/jwt/authbackendrole"
+	authbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/jwt/authbackendrole"
 	authbackendrolekubernetesauthbackendrole "github.com/topfreegames/upjet-provider-vault/internal/controller/kubernetesauthbackendrole/authbackendrole"
 	providerconfig "github.com/topfreegames/upjet-provider-vault/internal/controller/providerconfig"
 	policy "github.com/topfreegames/upjet-provider-vault/internal/controller/vault/policy"
@@ -21,9 +21,9 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		authbackendrole.Setup,
+		secretbackendrole.Setup,
 		group.Setup,
-		authbackendrolejwt.Setup,
+		authbackendrole.Setup,
 		authbackendrolekubernetesauthbackendrole.Setup,
 		providerconfig.Setup,
 		policy.Setup,

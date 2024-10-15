@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this AuthBackendRole
-func (mg *AuthBackendRole) GetTerraformResourceType() string {
-	return "vault_aws_auth_backend_role"
+// GetTerraformResourceType returns Terraform resource type for this SecretBackendRole
+func (mg *SecretBackendRole) GetTerraformResourceType() string {
+	return "vault_aws_secret_backend_role"
 }
 
-// GetConnectionDetailsMapping for this AuthBackendRole
-func (tr *AuthBackendRole) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this SecretBackendRole
+func (tr *SecretBackendRole) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this AuthBackendRole
-func (tr *AuthBackendRole) GetObservation() (map[string]any, error) {
+// GetObservation of this SecretBackendRole
+func (tr *SecretBackendRole) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *AuthBackendRole) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this AuthBackendRole
-func (tr *AuthBackendRole) SetObservation(obs map[string]any) error {
+// SetObservation for this SecretBackendRole
+func (tr *SecretBackendRole) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *AuthBackendRole) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this AuthBackendRole
-func (tr *AuthBackendRole) GetID() string {
+// GetID returns ID of underlying Terraform resource of this SecretBackendRole
+func (tr *SecretBackendRole) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this AuthBackendRole
-func (tr *AuthBackendRole) GetParameters() (map[string]any, error) {
+// GetParameters of this SecretBackendRole
+func (tr *SecretBackendRole) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *AuthBackendRole) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this AuthBackendRole
-func (tr *AuthBackendRole) SetParameters(params map[string]any) error {
+// SetParameters for this SecretBackendRole
+func (tr *SecretBackendRole) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *AuthBackendRole) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this AuthBackendRole
-func (tr *AuthBackendRole) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this SecretBackendRole
+func (tr *SecretBackendRole) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *AuthBackendRole) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this AuthBackendRole
-func (tr *AuthBackendRole) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this SecretBackendRole
+func (tr *SecretBackendRole) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource '%q'", tr.GetName())
@@ -110,10 +110,10 @@ func (tr *AuthBackendRole) GetMergedParameters(shouldMergeInitProvider bool) (ma
 	return params, nil
 }
 
-// LateInitialize this AuthBackendRole using its observed tfState.
+// LateInitialize this SecretBackendRole using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *AuthBackendRole) LateInitialize(attrs []byte) (bool, error) {
-	params := &AuthBackendRoleParameters{}
+func (tr *SecretBackendRole) LateInitialize(attrs []byte) (bool, error) {
+	params := &SecretBackendRoleParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *AuthBackendRole) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *AuthBackendRole) GetTerraformSchemaVersion() int {
+func (tr *SecretBackendRole) GetTerraformSchemaVersion() int {
 	return 0
 }
