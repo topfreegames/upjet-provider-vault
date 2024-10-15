@@ -122,7 +122,7 @@ jobs:
         run: make generate
 
       - name: Upload File as Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: schema.json
           path: config/schema.json
@@ -282,7 +282,7 @@ jobs:
           BUILD_ARGS: "--load"
 
       - name: Publish Artifacts to GitHub
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: output
           path: _output/**
