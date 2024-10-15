@@ -12,7 +12,7 @@ export TERRAFORM_PROVIDER_VERSION ?= 4.3.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-vault
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
-CROSSPLANE_VERSION ?= 1.16.0
+CROSSPLANE_VERSION ?= 1.17.1
 
 PLATFORMS ?= linux_amd64 linux_arm64
 
