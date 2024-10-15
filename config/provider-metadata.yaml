@@ -1448,6 +1448,9 @@ resources:
                 and a default TTL is specified on the role,
                 then this default TTL will be used. Valid only when credential_type is one of
                 assumed_role or federation_token.
+            external_id: |-
+                (Optional) - External ID to set for assume role creds.
+                Valid only when credential_type is set to assumed_role.
             iam_groups: |-
                 (Optional) - A list of IAM group names. IAM users generated
                 against this vault role will be added to these IAM Groups. For a credential
@@ -1493,6 +1496,10 @@ resources:
                 - (Optional) Specifies the ARNs of the AWS roles this Vault role
                 is allowed to assume. Required when credential_type is assumed_role and
                 prohibited otherwise.
+            session_tags: |-
+                (Optional) - A map of strings representing key/value pairs to be set
+                during assume role creds creation. Valid only when credential_type is set to
+                assumed_role.
             user_path: |-
                 - (Optional) The path for the user name. Valid only when
                 credential_type is iam_user. Default is /.
@@ -5688,7 +5695,7 @@ resources:
             identity_token_key: |-
                 - (Optional)  The key to use for signing plugin workload identity tokens. If
                 not provided, this will default to Vault's OIDC default key.
-            listing_availability: |-
+            listing_visibility: |-
                 - (Optional) Specifies whether to show this mount in the UI-specific
                 listing endpoint. Valid values are unauth or hidden. If not set, behaves like hidden.
             local: '- (Optional) Boolean flag that can be explicitly set to true to enforce local mount in HA environment'
@@ -7862,6 +7869,10 @@ resources:
                   "token": "V0idfhi2iksSDU234ucdbi2nidsi..."
                 }
         argumentDocs:
+            address: |-
+                - (Optional) The address of the Terraform Cloud server, if using
+                Terraform Enterprise, provided as "protocol://host:port". The default is
+                https://app.terraform.io for Terraform Cloud.
             backend: '- (Optional) The unique location this backend should be mounted at. Must not begin or end with a /. Defaults to terraform.'
             default_lease_ttl_seconds: '- (Optional) The default TTL for credentials issued by this backend.'
             description: '- (Optional) A human-friendly description for this backend.'
