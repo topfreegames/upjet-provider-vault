@@ -15,6 +15,10 @@ import (
 
 type PolicyInitParameters struct {
 
+	// The name of the policy
+	// Name of the policy
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
 	// The namespace is always relative to the provider's configured namespace.
@@ -30,6 +34,10 @@ type PolicyInitParameters struct {
 type PolicyObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The name of the policy
+	// Name of the policy
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
 	// The namespace is always relative to the provider's configured namespace.
@@ -43,6 +51,11 @@ type PolicyObservation struct {
 }
 
 type PolicyParameters struct {
+
+	// The name of the policy
+	// Name of the policy
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
@@ -94,6 +107,7 @@ type PolicyStatus struct {
 type Policy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.policy) || (has(self.initProvider) && has(self.initProvider.policy))",message="spec.forProvider.policy is a required parameter"
 	Spec   PolicySpec   `json:"spec"`
 	Status PolicyStatus `json:"status,omitempty"`

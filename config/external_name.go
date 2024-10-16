@@ -12,9 +12,9 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
 	"vault_kubernetes_auth_backend_role": config.NameAsIdentifier,
 	"vault_identity_group":               config.NameAsIdentifier,
-	"vault_jwt_auth_backend_role":        config.NameAsIdentifier,
-	"vault_aws_secret_backend_role":      config.NameAsIdentifier,
-	"vault_policy":                       config.NameAsIdentifier,
+	"vault_jwt_auth_backend_role":        config.IdentifierFromProvider,
+	"vault_aws_secret_backend_role":      config.IdentifierFromProvider,
+	"vault_policy":                       config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

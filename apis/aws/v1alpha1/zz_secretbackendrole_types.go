@@ -61,6 +61,11 @@ type SecretBackendRoleInitParameters struct {
 	// The max allowed TTL in seconds for STS credentials (credentials TTL are capped to max_sts_ttl). Valid only when credential_type is one of assumed_role or federation_token.
 	MaxStsTTL *float64 `json:"maxStsTtl,omitempty" tf:"max_sts_ttl,omitempty"`
 
+	// The name to identify this role within the backend.
+	// Must be unique within the backend.
+	// Unique name for the role.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
 	// The namespace is always relative to the provider's configured namespace.
@@ -163,6 +168,11 @@ type SecretBackendRoleObservation struct {
 	// one of assumed_role or federation_token.
 	// The max allowed TTL in seconds for STS credentials (credentials TTL are capped to max_sts_ttl). Valid only when credential_type is one of assumed_role or federation_token.
 	MaxStsTTL *float64 `json:"maxStsTtl,omitempty" tf:"max_sts_ttl,omitempty"`
+
+	// The name to identify this role within the backend.
+	// Must be unique within the backend.
+	// Unique name for the role.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
@@ -272,6 +282,12 @@ type SecretBackendRoleParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxStsTTL *float64 `json:"maxStsTtl,omitempty" tf:"max_sts_ttl,omitempty"`
 
+	// The name to identify this role within the backend.
+	// Must be unique within the backend.
+	// Unique name for the role.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// The namespace to provision the resource in.
 	// The value should not contain leading or trailing forward slashes.
 	// The namespace is always relative to the provider's configured namespace.
@@ -370,6 +386,7 @@ type SecretBackendRole struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.backend) || (has(self.initProvider) && has(self.initProvider.backend))",message="spec.forProvider.backend is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.credentialType) || (has(self.initProvider) && has(self.initProvider.credentialType))",message="spec.forProvider.credentialType is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   SecretBackendRoleSpec   `json:"spec"`
 	Status SecretBackendRoleStatus `json:"status,omitempty"`
 }

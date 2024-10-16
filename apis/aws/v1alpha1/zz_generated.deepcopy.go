@@ -94,6 +94,11 @@ func (in *SecretBackendRoleInitParameters) DeepCopyInto(out *SecretBackendRoleIn
 		*out = new(float64)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Namespace != nil {
 		in, out := &in.Namespace, &out.Namespace
 		*out = new(string)
@@ -256,6 +261,11 @@ func (in *SecretBackendRoleObservation) DeepCopyInto(out *SecretBackendRoleObser
 		*out = new(float64)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Namespace != nil {
 		in, out := &in.Namespace, &out.Namespace
 		*out = new(string)
@@ -379,6 +389,11 @@ func (in *SecretBackendRoleParameters) DeepCopyInto(out *SecretBackendRoleParame
 	if in.MaxStsTTL != nil {
 		in, out := &in.MaxStsTTL, &out.MaxStsTTL
 		*out = new(float64)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
 		**out = **in
 	}
 	if in.Namespace != nil {

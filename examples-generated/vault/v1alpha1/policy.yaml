@@ -8,6 +8,7 @@ metadata:
   name: example
 spec:
   forProvider:
+    name: dev-team
     policy: |
       path "secret/my_app" {
         capabilities = ["update"]
