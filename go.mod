@@ -1,8 +1,6 @@
 module github.com/topfreegames/upjet-provider-vault
 
-go 1.22.0
-
-toolchain go1.22.5
+go 1.23.0
 
 require (
 	dario.cat/mergo v1.0.0
@@ -104,7 +102,7 @@ require (
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/oauth2 v0.21.0 // indirect
+	golang.org/x/oauth2 v0.27.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/term v0.25.0 // indirect
